@@ -31,6 +31,54 @@ chthollyTree.query(1, 7, sum);
 console.log(result); // 12
 ```
 
+## Type Definition
+
+```ts
+type ChthollyNode<T> = {
+  left: number;
+  right: number;
+  value: T;
+  next: ChthollyNode<T> | null;
+};
+
+function createDefaultNode(value?: number): ChthollyNode<number>;
+
+class ChthollyTree<T = number> {
+  min: number;
+  max: number;
+  root: ChthollyNode<T>;
+  constructor(node: ChthollyNode<T>);
+  /**
+   * It takes a position `pos` and splits the original interval containing point `pos` (denoted as [left, right])
+   * into two intervals [left, pos) and [pos, right], and returns an the latter node.
+   */
+  split(pos: number): ChthollyNode<T>;
+  /**
+   * Used to assign a value to a range.
+   * Suppose the range [left, right] is to be assigned the value `value`.
+   */
+  assign(left: number, right: number, value: T): ChthollyNode<T>;
+  /**
+   * Performs an action on all nodes within the specified range [left, right].
+   *
+   * The return value of the action function is assigned to the node.
+   */
+  perform(
+    left: number,
+    right: number,
+    action: (node: Readonly<ChthollyNode<T>>) => T,
+  ): void;
+  /**
+   * Queries the tree for nodes within the specified range [left, right] and applies the read function to each node.
+   */
+  query(
+    left: number,
+    right: number,
+    read: (node: Readonly<ChthollyNode<T>>) => void,
+  ): void;
+}
+```
+
 ## References
 
 - [C. Willem, Chtholly and Seniorious - CodeForces](https://codeforces.com/problemset/problem/896/C)

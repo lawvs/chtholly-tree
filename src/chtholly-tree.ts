@@ -1,5 +1,3 @@
-type Value = number;
-
 // [left, right]
 export type ChthollyNode<T> = {
   left: number;
@@ -17,7 +15,7 @@ export function createDefaultNode(value = 0): ChthollyNode<number> {
   };
 }
 
-export class ChthollyTree<T = Value> {
+export class ChthollyTree<T = number> {
   // [min, max]
   min: number;
   max: number;
