@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { ChthollyNode, ChthollyTree } from "./chtholly-tree";
+import { ChthollyNode, ChthollyTree, createDefaultNode } from "./chtholly-tree";
 
 const flattenLinkedList = <T = unknown>(
   tree: ChthollyTree<T>,
@@ -401,5 +401,136 @@ describe("ChthollyTree query", () => {
       value: 3,
       next: null,
     });
+  });
+});
+
+describe("ChthollyTree example", () => {
+  it("should sum the values within the range", () => {
+    const rootNode: ChthollyNode<number> = {
+      left: 0,
+      right: 10,
+      value: 1,
+      next: null,
+    };
+    const tree = new ChthollyTree(rootNode);
+    tree.assign(3, 5, 2);
+    tree.assign(6, 10, 3);
+
+    let result = 0;
+    const sum = (node: ChthollyNode<number>) =>
+      (result += node.value * (node.right - node.left + 1));
+    tree.query(1, 7, sum);
+    expect(result).toBe(14);
+  });
+});
+
+describe("leetcode 715", () => {
+  // https://leetcode.com/problems/range-module/
+  class RangeModule {
+    tree: ChthollyTree<number>;
+    constructor() {
+      this.tree = new ChthollyTree<number>(createDefaultNode());
+    }
+
+    addRange(left: number, right: number): void {
+      right--;
+      this.tree.assign(left, right, 1);
+    }
+
+    queryRange(left: number, right: number): boolean {
+      right--;
+      let result = true;
+      this.tree.query(left, right, (node) => {
+        if (node.value !== 1) {
+          result = false;
+        }
+      });
+      return result;
+    }
+
+    removeRange(left: number, right: number): void {
+      right--;
+      this.tree.assign(left, right, 0);
+    }
+  }
+
+  const run = (testCase: any) => {
+    let rangeModule: RangeModule;
+    const result = testCase[0].map((method: any, i: any) => {
+      const args = testCase[1][i] as [number, number];
+      switch (method) {
+        case "RangeModule":
+          rangeModule = new RangeModule();
+          return null;
+        case "addRange":
+          rangeModule.addRange(...args);
+          return null;
+        case "removeRange":
+          rangeModule.removeRange(...args);
+          return null;
+        case "queryRange":
+          return rangeModule.queryRange(...args);
+        default:
+          break;
+      }
+      throw new Error("Unreachable");
+    });
+    return result;
+  };
+
+  it("case1", () => {
+    const testCase = [
+      [
+        "RangeModule",
+        "addRange",
+        "removeRange",
+        "queryRange",
+        "queryRange",
+        "queryRange",
+      ],
+      [[], [10, 20], [14, 16], [10, 14], [13, 15], [16, 17]],
+    ];
+    expect(run(testCase)).toEqual([null, null, null, true, false, true]);
+  });
+
+  it("case2", () => {
+    const testCase = [
+      [
+        "RangeModule",
+        "addRange",
+        "queryRange",
+        "removeRange",
+        "removeRange",
+        "addRange",
+        "queryRange",
+        "addRange",
+        "queryRange",
+        "removeRange",
+      ],
+      [
+        [],
+        [5, 8],
+        [3, 4],
+        [5, 6],
+        [3, 6],
+        [1, 3],
+        [2, 3],
+        [4, 8],
+        [2, 3],
+        [4, 9],
+      ],
+    ];
+    expect(run(testCase)).toEqual([
+      null,
+      null,
+      false,
+      null,
+      null,
+      null,
+      true,
+      null,
+      true,
+      null,
+    ]);
   });
 });

@@ -2,6 +2,29 @@
 
 A Chtholly Tree implementation in TypeScript.
 
+## Usage
+
+```ts
+import { ChthollyTree, type ChthollyNode } from "chtholly-tree";
+
+const rootNode: ChthollyNode<number> = {
+  left: 0,
+  right: 10,
+  value: 1,
+  next: null,
+};
+
+const tree = new ChthollyTree<number>(rootNode);
+tree.assign(3, 5, 2);
+tree.assign(6, 10, 3);
+
+let result = 0;
+const sum = (node: ChthollyNode<number>) =>
+  (result += node.value * (node.right - node.left + 1));
+tree.query(1, 7, sum);
+console.log(result); // 14
+```
+
 ## References
 
 - [C. Willem, Chtholly and Seniorious - CodeForces](https://codeforces.com/problemset/problem/896/C)
