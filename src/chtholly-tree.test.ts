@@ -412,15 +412,16 @@ describe("ChthollyTree example", () => {
       value: 1,
       next: null,
     };
-    const tree = new ChthollyTree(rootNode);
-    tree.assign(3, 5, 2);
-    tree.assign(6, 10, 3);
+
+    const chthollyTree = new ChthollyTree<number>(rootNode);
+    chthollyTree.assign(3, 5, 2);
+    chthollyTree.perform(6, 10, (node) => node.value + 1);
 
     let result = 0;
     const sum = (node: ChthollyNode<number>) =>
       (result += node.value * (node.right - node.left + 1));
-    tree.query(1, 7, sum);
-    expect(result).toBe(14);
+    chthollyTree.query(1, 7, sum);
+    expect(result).toBe(12);
   });
 });
 
