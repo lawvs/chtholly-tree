@@ -1,0 +1,7 @@
+{
+  // https://github.com/tsconfig/bases#strictest-tsconfigjson
+  "extends": "@tsconfig/strictest/tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist"
+  }
+}
