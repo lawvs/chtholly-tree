@@ -8,12 +8,14 @@ export type ChthollyNode<T> = {
   next: ChthollyNode<T> | null;
 };
 
-export const DEFAULT_NODE: ChthollyNode<number> = {
-  left: -Infinity,
-  right: Infinity,
-  value: 0,
-  next: null,
-};
+export function createDefaultNode(value = 0): ChthollyNode<number> {
+  return {
+    left: -Infinity,
+    right: Infinity,
+    value,
+    next: null,
+  };
+}
 
 export class ChthollyTree<T = Value> {
   // [min, max]
@@ -23,7 +25,9 @@ export class ChthollyTree<T = Value> {
 
   constructor(node: ChthollyNode<T>) {
     this.min = node.left;
-    this.max = node.right;
+    let lastNode = node;
+    while (lastNode.next) lastNode = lastNode.next;
+    this.max = lastNode.right;
     this.root = node;
   }
 
